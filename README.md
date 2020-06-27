@@ -41,3 +41,11 @@ If you have experience working with Kubernetes, you can attempt the bonus scenar
 - Create a namespace `demo-ops`
 - Create a deployment and service manifest for the app.
 - Configure liveliness check, resource quotas for the deployment.
+
+## SOLUTION
+
+run.sh : is the shell srcipt for installing vagrant and running a VM(ubuntu xenial64) with provisioning done.
+dockerfile: Dockerfile of the app.
+docker-compose.yml: the composing files.
+Provisioning takes care of all the mentioned details.
+I used a VM to create the same in my home computer that has Windows.
