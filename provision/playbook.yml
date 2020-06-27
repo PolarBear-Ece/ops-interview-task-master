@@ -1,0 +1,6 @@
+- hosts: all
+  remote_user: demo
+  become: true
+  become_method: sudo
+  roles:
+    - setup

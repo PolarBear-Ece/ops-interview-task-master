@@ -1,0 +1,79 @@
+---
+# tasks file for provision/roles/setup
+
+- name: "Change Name Hostname"
+  hostname:
+    name: demo-ops
+
+- name: "Increasing open files limit"
+  shell: sysctl -w fs.file-max=500000
+
+- name: "Increasing vm swappiness to 10"
+  sysctl:
+   name: vm.swappiness
+   sysctl_file: /etc/sysctl.conf
+   sysctl_set: yes
+   value: 10
+   state: present
+
+- name: "Remove kernel.panic"  
+  sysctl:
+    name: kernel.panic
+    state: absent
+    sysctl_file: /etc/sysctl.conf
+
+- name: "Set timezone to Asia/Kolkata"
+  timezone:
+    name: Asia/Kolkata
+
+- name: Install aptitude using apt
+  apt: 
+    name: aptitude 
+    state: latest 
+    update_cache: yes 
+    force_apt_get: yes
+
+- name: Install required system packages
+  apt: 
+    name: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+    state: latest 
+    update_cache: yes 
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+- name: Update apt and install docker-ce
+  apt: 
+    update_cache: yes 
+    name: docker-ce 
+    state: latest  
+- name: Update apt and install docker-ce
+  apt: 
+    update_cache: yes 
+    name: docker-ce-cli 
+    state: latest
+- name: Update apt and install docker-ce
+  apt: 
+    update_cache: yes 
+    name: containerd.io 
+    state: latest
+
+- name: Install docker-compose
+  shell: sudo curl -L https://github.com/docker/compose/releases/download/1.26.0/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
+- name: change permissions 
+  shell: chmod +x /usr/local/bin/docker-compose
+
+- name: Create and start services 
+  shell: docker-compose up -d redis
+  args:
+    chdir: /vagrant/ops-interview-task-master
+
+- name: Create and start services 
+  shell: docker-compose up goapp
+  args:
+   chdir: /vagrant/ops-interview-task-master
+
