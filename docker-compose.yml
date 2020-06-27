@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+ goapp:
+  build:
+   context: "."
+   labels:
+     - creator:"mohit.gupta.ece16@itbhu.ac.in"
+   args:
+     - "redis_addr=0.0.0.0:7002"
+     - "app_addr=103.240.195.81:8080"
+  network_mode: "host"
+  ports:
+   - "8000:8080"
+ redis1:
+  image: redis
+  ports:
+   - "7002:6379"
+  volumes:
+   - ".:/data:rw"
+  entrypoint: redis-server --appendonly yes 
+  restart: always 
